@@ -86,7 +86,7 @@
                     <div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-4 text-sm">
                         <div>
                             <p class="text-slate-500 text-xs">HM Terakhir</p>
-                            <p id="hm-last-25" class="font-bold text-slate-900 text-lg mt-0.5">1060.0</p>
+                            <p id="hm-last-25" class="font-bold text-slate-900 text-lg mt-0.5">1060</p>
                         </div>
                         <div>
                             <p class="text-slate-500 text-xs">Status Terakhir</p>
@@ -166,11 +166,11 @@
                 <div id="modalHmSection" class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block font-medium text-slate-700 mb-1">HM Start</label>
-                        <input type="number" step="0.1" id="mHmStart" class="w-full border border-slate-300 rounded-lg p-2">
+                        <input type="number" step="1" id="mHmStart" class="w-full border border-slate-300 rounded-lg p-2">
                     </div>
                     <div>
                         <label class="block font-medium text-slate-700 mb-1">HM Stop</label>
-                        <input type="number" step="0.1" id="mHmStop" class="w-full border border-slate-300 rounded-lg p-2">
+                        <input type="number" step="1" id="mHmStop" class="w-full border border-slate-300 rounded-lg p-2">
                     </div>
                 </div>
                 <div>
@@ -192,7 +192,7 @@
             <p class="text-xs text-slate-500">Masukkan nilai Hour Meter (HM) akhir pada saat genset dimatikan:</p>
             <div>
                 <label class="block font-medium text-slate-700 mb-1 text-sm">HM Stop</label>
-                <input type="number" step="0.1" id="inputHmStop25" class="w-full border border-slate-300 rounded-lg p-2.5 font-bold text-lg" placeholder="Contoh: 1065.5">
+                <input type="number" step="1" id="inputHmStop25" class="w-full border border-slate-300 rounded-lg p-2.5 font-bold text-lg" placeholder="Contoh: 1065">
             </div>
             <div class="flex justify-end gap-2 pt-2">
                 <button onclick="closeStop25Modal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-medium text-sm">Batal</button>
@@ -206,12 +206,12 @@
         // === URL GOOGLE SHEETS WEB APP OTOMATIS (Ganti teks di bawah dengan URL /exec milik Anda) ===
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyP1sEymhxpFiNTtQ79ajUsp7M8dIk0k8g0c-MEfTvG4qtG57lzmBC8iDED_OR-zLAD/exec";
 
-        let logs = JSON.parse(localStorage.getItem('genset_logs_v3') || '[]');
-        let activeSessions = JSON.parse(localStorage.getItem('genset_active_v3') || '{}');
+        let logs = JSON.parse(localStorage.getItem('genset_logs_v4') || '[]');
+        let activeSessions = JSON.parse(localStorage.getItem('genset_active_v4') || '{}');
 
         function saveState() {
-            localStorage.setItem('genset_logs_v3', JSON.stringify(logs));
-            localStorage.setItem('genset_active_v3', JSON.stringify(activeSessions));
+            localStorage.setItem('genset_logs_v4', JSON.stringify(logs));
+            localStorage.setItem('genset_active_v4', JSON.stringify(activeSessions));
             renderTable();
             updateUIState();
         }
@@ -245,7 +245,7 @@
         }
 
         function confirmStop25() {
-            const hmStop = parseFloat(document.getElementById('inputHmStop25').value);
+            const hmStop = parseInt(document.getElementById('inputHmStop25').value, 10);
             const active = activeSessions['Genset 25 kVA'];
             if (!active) return;
             if (isNaN(hmStop) || hmStop < active.hmStart) {
@@ -253,7 +253,7 @@
                 return;
             }
             const stopTime = new Date().toISOString();
-            const hmDiff = parseFloat((hmStop - active.hmStart).toFixed(1));
+            const hmDiff = hmStop - active.hmStart;
             const duration = calculateDuration(active.startTime, stopTime);
 
             const record = {
@@ -324,9 +324,9 @@
         function getLastHm25() {
             const completed25 = logs.filter(l => l.unit === 'Genset 25 kVA' && l.hmStop !== 'N/A');
             if (completed25.length > 0) {
-                return parseFloat(completed25[0].hmStop);
+                return parseInt(completed25[0].hmStop, 10);
             }
-            return 1060.0;
+            return 1060;
         }
 
         function updateUIState() {
@@ -357,7 +357,7 @@
             const text25 = document.getElementById('status-text-25');
             const btnStart25 = document.getElementById('btn-start-25');
             const btnStop25 = document.getElementById('btn-stop-25');
-            document.getElementById('hm-last-25').innerText = getLastHm25().toFixed(1);
+            document.getElementById('hm-last-25').innerText = getLastHm25();
 
             if (active25) {
                 badge25.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 bg-amber-100 text-amber-800 animate-pulse";
@@ -444,7 +444,7 @@
             document.getElementById('mStart').value = past.toISOString().slice(0, 16);
             document.getElementById('mStop').value = now.toISOString().slice(0, 16);
             document.getElementById('mHmStart').value = getLastHm25();
-            document.getElementById('mHmStop').value = (getLastHm25() + 1.0).toFixed(1);
+            document.getElementById('mHmStop').value = getLastHm25() + 1;
             document.getElementById('manualModal').classList.remove('hidden');
             handleModalUnitChange();
         }
@@ -467,13 +467,13 @@
 
             let hmStart = 'N/A', hmStop = 'N/A', hmDiff = 'N/A';
             if (unit === 'Genset 25 kVA') {
-                hmStart = parseFloat(document.getElementById('mHmStart').value);
-                hmStop = parseFloat(document.getElementById('mHmStop').value);
+                hmStart = parseInt(document.getElementById('mHmStart').value, 10);
+                hmStop = parseInt(document.getElementById('mHmStop').value, 10);
                 if (isNaN(hmStart) || isNaN(hmStop) || hmStop < hmStart) {
                     alert('Nilai HM tidak valid!');
                     return;
                 }
-                hmDiff = parseFloat((hmStop - hmStart).toFixed(1));
+                hmDiff = hmStop - hmStart;
             }
 
             const record = {
