@@ -3,105 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log Operasional Genset 6.9 kVA & 25 kVA</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Log Operasional Genset - Auto Google Sheets</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen pb-12">
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen">
 
     <!-- Header -->
-    <header class="bg-blue-900 text-white shadow-md">
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center space-x-3">
-                <div class="bg-blue-800 p-2.5 rounded-xl border border-blue-700">
-                    <i class="fa-solid fa-bolt text-amber-400 text-xl"></i>
+                <div class="bg-amber-500 p-2.5 rounded-lg text-slate-900 font-bold text-xl">
+                    <i class="fa-solid fa-bolt"></i>
                 </div>
                 <div>
                     <h1 class="text-xl font-bold tracking-wide">Log Operasional Genset</h1>
-                    <p class="text-xs text-blue-200">Monitoring & Pencatatan HM 6.9 kVA & 25 kVA</p>
+                    <p class="text-xs text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i> Terhubung Otomatis ke Google Sheets</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2">
-                <button onclick="openSheetConfigModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-2 rounded-lg font-medium transition flex items-center gap-1.5 shadow-sm">
-                    <i class="fa-brands fa-google-drive"></i> Koneksi Google Sheets
+            <div class="flex flex-wrap items-center gap-2">
+                <button onclick="openManualModal()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-4 py-2 rounded-lg text-sm transition shadow">
+                    <i class="fa-solid fa-plus mr-1.5"></i> Input Manual
                 </button>
-                <button onclick="openManualModal()" class="bg-blue-800 hover:bg-blue-700 text-white text-xs px-3 py-2 rounded-lg font-medium transition flex items-center gap-1.5 border border-blue-700">
-                    <i class="fa-solid fa-plus-circle"></i> Input Manual
+                <button onclick="exportCSV()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2 rounded-lg text-sm border border-slate-700 transition">
+                    <i class="fa-solid fa-download mr-1.5"></i> Ekspor CSV
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 mt-6 space-y-6">
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-6 space-y-6">
 
-        <!-- Status Kartu Real-Time Unit -->
+        <!-- Grid Status Unit -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             
-            <!-- Genset 6.9 kVA -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+            <!-- Card Genset 6.9 kVA -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
                 <div>
                     <div class="flex justify-between items-start">
                         <div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Unit Genset</span>
-                            <h3 class="text-xl font-bold text-slate-900 mt-0.5">Genset 6.9 kVA</h3>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 bg-slate-100 px-2 py-1 rounded">Non-HM</span>
+                            <h2 class="text-2xl font-bold text-slate-900 mt-2">Genset 6.9 kVA</h2>
                         </div>
-                        <span id="badge-69" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> STANDBY
-                        </span>
+                        <div id="badge-69" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 bg-emerald-100 text-emerald-800">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Standby
+                        </div>
                     </div>
-                    
-                    <div class="mt-4 grid grid-cols-2 gap-4 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                    <div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-4 text-sm">
                         <div>
-                            <span class="text-[11px] text-slate-500 block font-medium">Jam Terakhir / Status</span>
-                            <span id="stat-time-69" class="text-sm font-semibold text-slate-700">-</span>
+                            <p class="text-slate-500 text-xs">Status Terakhir</p>
+                            <p id="status-text-69" class="font-semibold text-slate-700 mt-0.5">Standby / Off</p>
                         </div>
                         <div>
-                            <span class="text-[11px] text-slate-500 block font-medium">Hour Meter (HM)</span>
-                            <span class="text-sm font-bold text-slate-400 italic">Non-HM (Manual)</span>
+                            <p class="text-slate-500 text-xs">Total Sesi Bulan Ini</p>
+                            <p id="count-69" class="font-semibold text-slate-700 mt-0.5">0 Sesi</p>
                         </div>
                     </div>
                 </div>
-
                 <div class="mt-6 pt-4 border-t border-slate-100 flex gap-3">
-                    <button id="btn-start-69" onclick="quickStart('Genset 6.9 kVA')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 px-4 rounded-xl text-sm font-semibold transition flex items-center justify-center gap-2 shadow-sm">
-                        <i class="fa-solid fa-play"></i> Nyalakan (ON)
+                    <button id="btn-start-69" onclick="toggleGenset('Genset 6.9 kVA', 'START')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-4 rounded-lg transition text-sm shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-power-off"></i> Nyalakan (ON)
                     </button>
-                    <button id="btn-stop-69" onclick="quickStop('Genset 6.9 kVA')" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white py-2.5 px-4 rounded-xl text-sm font-semibold transition hidden items-center justify-center gap-2 shadow-sm">
+                    <button id="btn-stop-69" onclick="toggleGenset('Genset 6.9 kVA', 'STOP')" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-medium py-2.5 px-4 rounded-lg transition text-sm shadow-sm flex items-center justify-center gap-2 hidden">
                         <i class="fa-solid fa-stop"></i> Matikan (OFF)
                     </button>
                 </div>
             </div>
 
-            <!-- Genset 25 kVA -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
+            <!-- Card Genset 25 kVA -->
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col justify-between">
                 <div>
                     <div class="flex justify-between items-start">
                         <div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Unit Genset</span>
-                            <h3 class="text-xl font-bold text-slate-900 mt-0.5">Genset 25 kVA</h3>
+                            <span class="text-xs font-semibold uppercase tracking-wider text-amber-700 bg-amber-50 px-2 py-1 rounded">HM Terintegrasi</span>
+                            <h2 class="text-2xl font-bold text-slate-900 mt-2">Genset 25 kVA</h2>
                         </div>
-                        <span id="badge-25" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> STANDBY
-                        </span>
+                        <div id="badge-25" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 bg-emerald-100 text-emerald-800">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Standby
+                        </div>
                     </div>
-                    
-                    <div class="mt-4 grid grid-cols-2 gap-4 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                    <div class="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-4 text-sm">
                         <div>
-                            <span class="text-[11px] text-slate-500 block font-medium">Jam Terakhir / Status</span>
-                            <span id="stat-time-25" class="text-sm font-semibold text-slate-700">-</span>
+                            <p class="text-slate-500 text-xs">HM Terakhir</p>
+                            <p id="hm-last-25" class="font-bold text-slate-900 text-lg mt-0.5">1060.0</p>
                         </div>
                         <div>
-                            <span class="text-[11px] text-slate-500 block font-medium">Hour Meter Terakhir</span>
-                            <span id="stat-hm-25" class="text-sm font-bold text-blue-600">1060.0 HM</span>
+                            <p class="text-slate-500 text-xs">Status Terakhir</p>
+                            <p id="status-text-25" class="font-semibold text-slate-700 mt-0.5">Standby / Off</p>
                         </div>
                     </div>
                 </div>
-
                 <div class="mt-6 pt-4 border-t border-slate-100 flex gap-3">
-                    <button id="btn-start-25" onclick="quickStart('Genset 25 kVA')" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white py-2.5 px-4 rounded-xl text-sm font-semibold transition flex items-center justify-center gap-2 shadow-sm">
-                        <i class="fa-solid fa-play"></i> Nyalakan (ON)
+                    <button id="btn-start-25" onclick="promptStart25()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-4 rounded-lg transition text-sm shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-power-off"></i> Nyalakan (ON)
                     </button>
-                    <button id="btn-stop-25" onclick="quickStop('Genset 25 kVA')" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white py-2.5 px-4 rounded-xl text-sm font-semibold transition hidden items-center justify-center gap-2 shadow-sm">
+                    <button id="btn-stop-25" onclick="promptStop25()" class="flex-1 bg-rose-600 hover:bg-rose-700 text-white font-medium py-2.5 px-4 rounded-lg transition text-sm shadow-sm flex items-center justify-center gap-2 hidden">
                         <i class="fa-solid fa-stop"></i> Matikan (OFF)
                     </button>
                 </div>
@@ -110,40 +107,30 @@
         </div>
 
         <!-- Tabel Riwayat Log -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div>
-                    <h3 class="font-bold text-slate-900">Riwayat Log Operasional</h3>
-                    <p class="text-xs text-slate-500">Catatan lengkap jam hidup, mati, dan HM genset</p>
-                </div>
-                <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <input type="text" id="search-box" onkeyup="renderTable()" placeholder="Cari catatan..." class="text-xs border border-slate-200 rounded-lg px-3 py-2 outline-none focus:border-blue-500 w-full sm:w-48">
-                    <button onclick="exportCSV()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs px-3 py-2 rounded-lg font-medium transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-arrow-down"></i> CSV
-                    </button>
-                    <button onclick="window.print()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs px-3 py-2 rounded-lg font-medium transition flex items-center gap-1.5">
-                        <i class="fa-solid fa-print"></i> Cetak
-                    </button>
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-4 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4">
+                <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-clock-rotate-left mr-2 text-amber-500"></i> Riwayat Log Operasional</h3>
+                <div class="flex items-center gap-2">
+                    <input type="text" id="searchInput" onkeyup="renderTable()" placeholder="Cari catatan..." class="px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
                 </div>
             </div>
-
             <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-xs">
+                <table class="w-full text-left border-collapse text-sm">
                     <thead>
-                        <tr class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
-                            <th class="p-3.5">Unit</th>
-                            <th class="p-3.5">Waktu Start</th>
-                            <th class="p-3.5">Waktu Stop</th>
-                            <th class="p-3.5">Durasi</th>
-                            <th class="p-3.5">HM Start</th>
-                            <th class="p-3.5">HM Stop</th>
-                            <th class="p-3.5">Selisih HM</th>
-                            <th class="p-3.5">Status</th>
-                            <th class="p-3.5 text-center">Aksi</th>
+                        <tr class="bg-slate-50 text-slate-600 uppercase text-xs tracking-wider border-b border-slate-200">
+                            <th class="p-3 sm:p-4">Unit</th>
+                            <th class="p-3 sm:p-4">Waktu Start</th>
+                            <th class="p-3 sm:p-4">Waktu Stop</th>
+                            <th class="p-3 sm:p-4">Durasi</th>
+                            <th class="p-3 sm:p-4">HM Start</th>
+                            <th class="p-3 sm:p-4">HM Stop</th>
+                            <th class="p-3 sm:p-4">Selisih HM</th>
+                            <th class="p-3 sm:p-4">Status</th>
+                            <th class="p-3 sm:p-4 text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="log-table-body" class="divide-y divide-slate-100 text-slate-700">
-                        <!-- Render via JS -->
+                    <tbody id="logTableBody" class="divide-y divide-slate-100">
+                        <!-- Data dimasukkan via Javascript -->
                     </tbody>
                 </table>
             </div>
@@ -151,351 +138,293 @@
 
     </main>
 
-    <!-- Modal Stop / Selesaikan Sesi -->
-    <div id="modal-stop" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
-            <h3 class="font-bold text-lg text-slate-900" id="stop-modal-title">Matikan Genset</h3>
-            <p class="text-xs text-slate-500">Masukkan waktu selesai dan pembacaan HM terakhir (khusus 25 kVA).</p>
-            
-            <input type="hidden" id="stop-active-id">
-            <input type="hidden" id="stop-active-unit">
-
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">Waktu Stop</label>
-                    <input type="datetime-local" id="input-stop-time" class="w-full text-xs border border-slate-200 rounded-lg p-2.5 outline-none focus:border-blue-500">
-                </div>
-                <div id="group-hm-stop" class="hidden">
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">HM Stop (Hour Meter Akhir)</label>
-                    <input type="number" step="0.1" id="input-hm-stop" placeholder="Contoh: 1062.5" class="w-full text-xs border border-slate-200 rounded-lg p-2.5 outline-none focus:border-blue-500">
-                </div>
+    <!-- Modal Input Manual -->
+    <div id="manualModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="font-bold text-lg text-slate-900">Form Input Log Manual</h3>
+                <button onclick="closeManualModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-
-            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
-                <button onclick="closeStopModal()" class="px-4 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg transition">Batal</button>
-                <button onclick="submitStopSession()" class="px-4 py-2 text-xs font-medium bg-rose-600 hover:bg-rose-700 text-white rounded-lg transition shadow-sm">Simpan & Matikan</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Input Manual Lengkap -->
-    <div id="modal-manual" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <h3 class="font-bold text-lg text-slate-900">Form Input Manual Log</h3>
-            
-            <div class="space-y-3">
+            <form id="manualForm" onsubmit="saveManualLog(event)" class="space-y-4 text-sm">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Unit Genset</label>
-                    <select id="manual-unit" onchange="toggleManualHM()" class="w-full text-xs border border-slate-200 rounded-lg p-2.5 outline-none focus:border-blue-500">
+                    <label class="block font-medium text-slate-700 mb-1">Pilih Unit Genset</label>
+                    <select id="mUnit" onchange="handleModalUnitChange()" class="w-full border border-slate-300 rounded-lg p-2.5 focus:ring-2 focus:ring-amber-500 outline-none">
                         <option value="Genset 6.9 kVA">Genset 6.9 kVA (Non-HM)</option>
-                        <option value="Genset 25 kVA">Genset 25 kVA (Dengan HM)</option>
+                        <option value="Genset 25 kVA" selected>Genset 25 kVA (HM 1060+)</option>
                     </select>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Waktu Start</label>
-                        <input type="datetime-local" id="manual-start" class="w-full text-xs border border-slate-200 rounded-lg p-2.5 outline-none">
+                        <label class="block font-medium text-slate-700 mb-1">Waktu Start</label>
+                        <input type="datetime-local" id="mStart" required class="w-full border border-slate-300 rounded-lg p-2 text-xs">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Waktu Stop</label>
-                        <input type="datetime-local" id="manual-stop" class="w-full text-xs border border-slate-200 rounded-lg p-2.5 outline-none">
+                        <label class="block font-medium text-slate-700 mb-1">Waktu Stop</label>
+                        <input type="datetime-local" id="mStop" required class="w-full border border-slate-300 rounded-lg p-2 text-xs">
                     </div>
                 </div>
-                <div id="manual-hm-group" class="grid grid-cols-2 gap-3 hidden">
+                <div id="modalHmSection" class="grid grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">HM Start</label>
-                        <input type="number" step="0.1" id="manual-hm-start" value="1060.0" class="w-full text-xs border border-slate-200 rounded-lg p-2.5">
+                        <label class="block font-medium text-slate-700 mb-1">HM Start</label>
+                        <input type="number" step="0.1" id="mHmStart" class="w-full border border-slate-300 rounded-lg p-2">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">HM Stop</label>
-                        <input type="number" step="0.1" id="manual-hm-stop" class="w-full text-xs border border-slate-200 rounded-lg p-2.5">
+                        <label class="block font-medium text-slate-700 mb-1">HM Stop</label>
+                        <input type="number" step="0.1" id="mHmStop" class="w-full border border-slate-300 rounded-lg p-2">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">Catatan / Petugas</label>
-                    <input type="text" id="manual-notes" placeholder="Opsional" class="w-full text-xs border border-slate-200 rounded-lg p-2.5">
+                    <label class="block font-medium text-slate-700 mb-1">Catatan / Petugas</label>
+                    <input type="text" id="mNotes" placeholder="Contoh: Operasional Normal" class="w-full border border-slate-300 rounded-lg p-2">
                 </div>
-            </div>
-
-            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
-                <button onclick="closeManualModal()" class="px-4 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg">Batal</button>
-                <button onclick="submitManualLog()" class="px-4 py-2 text-xs font-medium bg-blue-900 hover:bg-blue-800 text-white rounded-lg shadow-sm">Simpan Log</button>
-            </div>
+                <div class="flex justify-end gap-2 pt-3">
+                    <button type="button" onclick="closeManualModal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-medium">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold rounded-lg shadow">Simpan Log</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- Modal Konfigurasi Google Sheets URL -->
-    <div id="modal-sheet" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
-            <h3 class="font-bold text-lg text-slate-900">Koneksi Google Sheets Web App</h3>
-            <p class="text-xs text-slate-500">Tempelkan URL Web App dari Google Apps Script agar setiap tombol Start/Stop otomatis mengirim data ke spreadsheet Anda.</p>
-            
+    <!-- Modal Prompt Stop 25 kVA -->
+    <div id="stop25Modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 space-y-4">
+            <h3 class="font-bold text-lg text-slate-900">Matikan Genset 25 kVA</h3>
+            <p class="text-xs text-slate-500">Masukkan nilai Hour Meter (HM) akhir pada saat genset dimatikan:</p>
             <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Web App URL</label>
-                <input type="text" id="sheet-url-input" placeholder="https://script.google.com/macros/s/.../exec" class="w-full text-xs border border-slate-200 rounded-lg p-2.5 outline-none focus:border-blue-500">
+                <label class="block font-medium text-slate-700 mb-1 text-sm">HM Stop</label>
+                <input type="number" step="0.1" id="inputHmStop25" class="w-full border border-slate-300 rounded-lg p-2.5 font-bold text-lg" placeholder="Contoh: 1065.5">
             </div>
-
-            <div class="flex justify-end gap-2 pt-3 border-t border-slate-100">
-                <button onclick="closeSheetConfigModal()" class="px-4 py-2 text-xs font-medium text-slate-600 hover:bg-slate-100 rounded-lg">Batal</button>
-                <button onclick="saveSheetUrl()" class="px-4 py-2 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg shadow-sm">Simpan & Sambungkan</button>
+            <div class="flex justify-end gap-2 pt-2">
+                <button onclick="closeStop25Modal()" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg font-medium text-sm">Batal</button>
+                <button onclick="confirmStop25()" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-semibold rounded-lg shadow text-sm">Matikan & Simpan</button>
             </div>
         </div>
     </div>
 
+    <!-- Javascript Logic -->
     <script>
-        let logs = JSON.parse(localStorage.getItem('genset_logs_v2')) || [
-            { id: 'GEN-1', unit: 'Genset 25 kVA', startTime: '2026-10-18 08:00', stopTime: '2026-10-18 10:00', duration: '2j 0m', hmStart: 1060.0, hmStop: 1062.5, hmDiff: 2.5, status: 'COMPLETED', notes: 'Contoh Data' }
-        ];
+        // === URL GOOGLE SHEETS WEB APP OTOMATIS (Ganti teks di bawah dengan URL /exec milik Anda) ===
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyP1sEymhxpFiNTtQ79ajUsp7M8dIk0k8g0c-MEfTvG4qtG57lzmBC8iDED_OR-zLAD/exec";
 
-        let activeSessions = JSON.parse(localStorage.getItem('genset_active_v2')) || {};
-        let sheetWebAppUrl = localStorage.getItem('genset_sheet_url') || '';
+        let logs = JSON.parse(localStorage.getItem('genset_logs_v3') || '[]');
+        let activeSessions = JSON.parse(localStorage.getItem('genset_active_v3') || '{}');
 
-        function saveToStorage() {
-            localStorage.setItem('genset_logs_v2', JSON.stringify(logs));
-            localStorage.setItem('genset_active_v2', JSON.stringify(activeSessions));
+        function saveState() {
+            localStorage.setItem('genset_logs_v3', JSON.stringify(logs));
+            localStorage.setItem('genset_active_v3', JSON.stringify(activeSessions));
+            renderTable();
+            updateUIState();
         }
 
-        function toLocalDateTimeString(date = new Date()) {
-            const pad = (n) => String(n).padStart(2, '0');
-            return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
-        }
-
-        function formatDateTimeDisplay(dtStr) {
-            if (!dtStr) return '-';
-            return dtStr.replace('T', ' ');
+        function formatDateTime(dateObj) {
+            const d = new Date(dateObj);
+            const pad = n => String(n).padStart(2, '0');
+            return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
         }
 
         function calculateDuration(start, stop) {
-            const diffMs = new Date(stop) - new Date(start);
-            if (diffMs <= 0) return '0j 0m';
-            const diffMins = Math.floor(diffMs / 60000);
-            const hrs = Math.floor(diffMins / 60);
-            const mins = diffMins % 60;
-            return `${hrs}j ${mins}m`;
+            const diff = new Date(stop) - new Date(start);
+            if (isNaN(diff) || diff < 0) return "-";
+            const mins = Math.floor(diff / 60000);
+            const hrs = Math.floor(mins / 60);
+            const remMins = mins % 60;
+            return `${hrs}j ${remMins}m`;
         }
 
-        // Kirim otomatis ke Google Sheets Web App
-        async function syncToGoogleSheet(payload) {
-            if (!sheetWebAppUrl) return;
-            try {
-                await fetch(sheetWebAppUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-            } catch (err) {
-                console.error("Gagal sinkronisasi Google Sheet:", err);
-            }
+        function promptStart25() {
+            toggleGenset('Genset 25 kVA', 'START');
         }
 
-        function quickStart(unit) {
-            const nowIso = toLocalDateTimeString();
-            const id = 'GEN-' + Date.now();
-            
-            // Tentukan HM awal untuk 25 kVA
-            let hmStartVal = null;
-            if (unit === 'Genset 25 kVA') {
-                let lastCompleted = logs.filter(l => l.unit === unit && l.hmStop);
-                hmStartVal = lastCompleted.length > 0 ? parseFloat(lastCompleted[lastCompleted.length - 1].hmStop) : 1060.0;
-            }
+        function promptStop25() {
+            document.getElementById('inputHmStop25').value = getLastHm25();
+            document.getElementById('stop25Modal').classList.remove('hidden');
+        }
 
-            activeSessions[unit] = {
-                id: id,
-                startTime: nowIso,
-                hmStart: hmStartVal
+        function closeStop25Modal() {
+            document.getElementById('stop25Modal').classList.add('hidden');
+        }
+
+        function confirmStop25() {
+            const hmStop = parseFloat(document.getElementById('inputHmStop25').value);
+            const active = activeSessions['Genset 25 kVA'];
+            if (!active) return;
+            if (isNaN(hmStop) || hmStop < active.hmStart) {
+                alert('Nilai HM Stop tidak boleh lebih kecil dari HM Start (' + active.hmStart + ')!');
+                return;
+            }
+            const stopTime = new Date().toISOString();
+            const hmDiff = parseFloat((hmStop - active.hmStart).toFixed(1));
+            const duration = calculateDuration(active.startTime, stopTime);
+
+            const record = {
+                id: 'GEN-' + Date.now(),
+                unit: 'Genset 25 kVA',
+                startTime: formatDateTime(active.startTime),
+                stopTime: formatDateTime(stopTime),
+                duration: duration,
+                hmStart: active.hmStart,
+                hmStop: hmStop,
+                hmDiff: hmDiff,
+                status: 'COMPLETED',
+                notes: 'Live Operasional'
             };
 
-            saveToStorage();
-            
-            // Tambahkan status RUNNING ke log awal
-            logs.unshift({
-                id: id,
-                unit: unit,
-                startTime: formatDateTimeDisplay(nowIso),
-                stopTime: '-',
-                duration: 'Berjalan...',
-                hmStart: hmStartVal !== null ? hmStartVal : 'N/A',
+            logs.unshift(record);
+            delete activeSessions['Genset 25 kVA'];
+            closeStop25Modal();
+            saveState();
+            syncToCloud(record);
+        }
+
+        function stop69() {
+            const active = activeSessions['Genset 6.9 kVA'];
+            if (!active) return;
+            const stopTime = new Date().toISOString();
+            const duration = calculateDuration(active.startTime, stopTime);
+
+            const record = {
+                id: 'GEN-' + Date.now(),
+                unit: 'Genset 6.9 kVA',
+                startTime: formatDateTime(active.startTime),
+                stopTime: formatDateTime(stopTime),
+                duration: duration,
+                hmStart: 'N/A',
                 hmStop: 'N/A',
                 hmDiff: 'N/A',
-                status: 'RUNNING',
-                notes: 'Otomatis Start'
-            });
-
-            syncToGoogleSheet({
-                id: id,
-                unit: unit,
-                startTime: formatDateTimeDisplay(nowIso),
-                stopTime: '-',
-                duration: 'Berjalan...',
-                hmStart: hmStartVal,
-                hmStop: null,
-                hmDiff: null,
-                status: 'RUNNING',
-                notes: 'Otomatis Start'
-            });
-
-            updateUI();
-        }
-
-        function quickStop(unit) {
-            const active = activeSessions[unit];
-            if (!active) return;
-
-            document.getElementById('stop-active-id').value = active.id;
-            document.getElementById('stop-active-unit').value = unit;
-            document.getElementById('input-stop-time').value = toLocalDateTimeString();
-
-            const hmGroup = document.getElementById('group-hm-stop');
-            if (unit === 'Genset 25 kVA') {
-                hmGroup.classList.remove('hidden');
-                document.getElementById('input-hm-stop').value = active.hmStart !== null ? (active.hmStart + 1).toFixed(1) : '1060.0';
-            } else {
-                hmGroup.classList.add('hidden');
-            }
-
-            document.getElementById('modal-stop').classList.remove('hidden');
-        }
-
-        function closeStopModal() {
-            document.getElementById('modal-stop').classList.add('hidden');
-        }
-
-        function submitStopSession() {
-            const id = document.getElementById('stop-active-id').value;
-            const unit = document.getElementById('stop-active-unit').value;
-            const stopTimeVal = document.getElementById('input-stop-time').value;
-            
-            const active = activeSessions[unit];
-            if (!stopTimeVal || !active) return;
-
-            let hmStopVal = null;
-            let hmDiffVal = null;
-
-            if (unit === 'Genset 25 kVA') {
-                hmStopVal = parseFloat(document.getElementById('input-hm-stop').value) || 0;
-                hmDiffVal = parseFloat((hmStopVal - active.hmStart).toFixed(1));
-            }
-
-            const durationStr = calculateDuration(active.startTime, stopTimeVal);
-            const stopFormatted = formatDateTimeDisplay(stopTimeVal);
-
-            // Update di array logs
-            const idx = logs.findIndex(l => l.id === id);
-            if (idx !== -1) {
-                logs[idx].stopTime = stopFormatted;
-                logs[idx].duration = durationStr;
-                logs[idx].hmStop = hmStopVal !== null ? hmStopVal : 'N/A';
-                logs[idx].hmDiff = hmDiffVal !== null ? hmDiffVal : 'N/A';
-                logs[idx].status = 'COMPLETED';
-            }
-
-            delete activeSessions[unit];
-            saveToStorage();
-            closeStopModal();
-
-            syncToGoogleSheet({
-                id: id,
-                unit: unit,
-                startTime: formatDateTimeDisplay(active.startTime),
-                stopTime: stopFormatted,
-                duration: durationStr,
-                hmStart: active.hmStart,
-                hmStop: hmStopVal,
-                hmDiff: hmDiffVal,
                 status: 'COMPLETED',
-                notes: 'Otomatis Stop'
-            });
+                notes: 'Live Operasional'
+            };
 
-            updateUI();
+            logs.unshift(record);
+            delete activeSessions['Genset 6.9 kVA'];
+            saveState();
+            syncToCloud(record);
         }
 
-        function updateUI() {
-            // Update 6.9 kVA UI
+        window.toggleGenset = function(unit, action) {
+            if (unit === 'Genset 6.9 kVA') {
+                if (action === 'START') {
+                    const now = new Date().toISOString();
+                    activeSessions[unit] = { startTime: now };
+                    saveState();
+                    syncToCloud({ id: 'GEN-' + Date.now(), unit, startTime: formatDateTime(now), stopTime: '-', duration: '-', hmStart: 'N/A', hmStop: 'N/A', hmDiff: 'N/A', status: 'RUNNING', notes: 'Live Start' });
+                } else {
+                    stop69();
+                }
+            } else {
+                if (action === 'START') {
+                    const now = new Date().toISOString();
+                    activeSessions[unit] = { startTime: now, hmStart: getLastHm25() };
+                    saveState();
+                    syncToCloud({ id: 'GEN-' + Date.now(), unit, startTime: formatDateTime(now), stopTime: '-', duration: '-', hmStart: activeSessions[unit].hmStart, hmStop: 'N/A', hmDiff: 'N/A', status: 'RUNNING', notes: 'Live Start' });
+                }
+            }
+        }
+
+        function getLastHm25() {
+            const completed25 = logs.filter(l => l.unit === 'Genset 25 kVA' && l.hmStop !== 'N/A');
+            if (completed25.length > 0) {
+                return parseFloat(completed25[0].hmStop);
+            }
+            return 1060.0;
+        }
+
+        function updateUIState() {
+            // 6.9 kVA
             const active69 = activeSessions['Genset 6.9 kVA'];
             const badge69 = document.getElementById('badge-69');
+            const text69 = document.getElementById('status-text-69');
             const btnStart69 = document.getElementById('btn-start-69');
             const btnStop69 = document.getElementById('btn-stop-69');
-            const statTime69 = document.getElementById('stat-time-69');
 
             if (active69) {
-                badge69.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1.5 animate-pulse";
-                badge69.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span> RUNNING`;
+                badge69.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 bg-amber-100 text-amber-800 animate-pulse";
+                badge69.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span> Running`;
+                text69.innerText = `Menyala sejak ${formatDateTime(active69.startTime)}`;
                 btnStart69.classList.add('hidden');
                 btnStop69.classList.remove('hidden');
-                statTime69.innerText = "Start: " + formatDateTimeDisplay(active69.startTime);
             } else {
-                badge69.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1.5";
-                badge69.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> STANDBY`;
+                badge69.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 bg-emerald-100 text-emerald-800";
+                badge69.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Standby`;
+                text69.innerText = `Standby / Off`;
                 btnStart69.classList.remove('hidden');
                 btnStop69.classList.add('hidden');
-                statTime69.innerText = "Standby";
             }
 
-            // Update 25 kVA UI
+            // 25 kVA
             const active25 = activeSessions['Genset 25 kVA'];
             const badge25 = document.getElementById('badge-25');
+            const text25 = document.getElementById('status-text-25');
             const btnStart25 = document.getElementById('btn-start-25');
             const btnStop25 = document.getElementById('btn-stop-25');
-            const statTime25 = document.getElementById('stat-time-25');
-            const statHm25 = document.getElementById('stat-hm-25');
-
-            let lastCompleted25 = logs.filter(l => l.unit === 'Genset 25 kVA' && l.hmStop !== 'N/A').pop();
-            if (lastCompleted25) {
-                statHm25.innerText = lastCompleted25.hmStop + " HM";
-            }
+            document.getElementById('hm-last-25').innerText = getLastHm25().toFixed(1);
 
             if (active25) {
-                badge25.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 flex items-center gap-1.5 animate-pulse";
-                badge25.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span> RUNNING`;
+                badge25.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 bg-amber-100 text-amber-800 animate-pulse";
+                badge25.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span> Running`;
+                text25.innerText = `Menyala sejak ${formatDateTime(active25.startTime)}`;
                 btnStart25.classList.add('hidden');
                 btnStop25.classList.remove('hidden');
-                statTime25.innerText = "Start: " + formatDateTimeDisplay(active25.startTime);
             } else {
-                badge25.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 flex items-center gap-1.5";
-                badge25.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> STANDBY`;
+                badge25.className = "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 bg-emerald-100 text-emerald-800";
+                badge25.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Standby`;
+                text25.innerText = `Standby / Off`;
                 btnStart25.classList.remove('hidden');
                 btnStop25.classList.add('hidden');
-                statTime25.innerText = "Standby";
             }
 
-            renderTable();
+            const currentMonth = new Date().toISOString().slice(0, 7);
+            const count69 = logs.filter(l => l.unit === 'Genset 6.9 kVA' && l.startTime.startsWith(currentMonth)).length;
+            document.getElementById('count-69').innerText = `${count69} Sesi`;
         }
 
         function renderTable() {
-            const keyword = document.getElementById('search-box').value.toLowerCase();
-            const tbody = document.getElementById('log-table-body');
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const tbody = document.getElementById('logTableBody');
             tbody.innerHTML = '';
 
-            const filtered = logs.filter(l => 
-                l.unit.toLowerCase().includes(keyword) || 
-                l.startTime.toLowerCase().includes(keyword) || 
-                l.status.toLowerCase().includes(keyword)
-            );
+            let allRows = [...logs];
+            Object.keys(activeSessions).forEach(unit => {
+                const act = activeSessions[unit];
+                allRows.unshift({
+                    id: 'active-' + unit,
+                    unit: unit,
+                    startTime: formatDateTime(act.startTime),
+                    stopTime: '-',
+                    duration: 'Sedang Berjalan...',
+                    hmStart: act.hmStart !== undefined ? act.hmStart : 'N/A',
+                    hmStop: 'N/A',
+                    hmDiff: 'N/A',
+                    status: 'RUNNING',
+                    notes: 'Live'
+                });
+            });
+
+            const filtered = allRows.filter(l => l.unit.toLowerCase().includes(query) || l.notes.toLowerCase().includes(query));
 
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-slate-400">Belum ada riwayat log operasional.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="9" class="p-6 text-center text-slate-400">Belum ada data log operasional.</td></tr>`;
                 return;
             }
 
-            filtered.forEach((l, index) => {
+            filtered.forEach(item => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-50/80 transition";
+                tr.className = item.status === 'RUNNING' ? 'bg-amber-50/60 border-b border-slate-100' : 'hover:bg-slate-50 border-b border-slate-100';
                 tr.innerHTML = `
-                    <td class="p-3.5 font-semibold text-slate-900">${l.unit}</td>
-                    <td class="p-3.5 text-slate-600">${l.startTime}</td>
-                    <td class="p-3.5 text-slate-600">${l.stopTime}</td>
-                    <td class="p-3.5 text-slate-600">${l.duration}</td>
-                    <td class="p-3.5 text-slate-600">${l.hmStart}</td>
-                    <td class="p-3.5 text-slate-600">${l.hmStop}</td>
-                    <td class="p-3.5 font-semibold text-blue-600">${l.hmDiff}</td>
-                    <td class="p-3.5">
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${l.status === 'RUNNING' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">
-                            ${l.status}
+                    <td class="p-3 sm:p-4 font-semibold text-slate-800">${item.unit}</td>
+                    <td class="p-3 sm:p-4 text-slate-600">${item.startTime}</td>
+                    <td class="p-3 sm:p-4 text-slate-600">${item.stopTime}</td>
+                    <td class="p-3 sm:p-4 text-slate-600">${item.duration}</td>
+                    <td class="p-3 sm:p-4 text-slate-600">${item.hmStart}</td>
+                    <td class="p-3 sm:p-4 text-slate-600">${item.hmStop}</td>
+                    <td class="p-3 sm:p-4 font-medium text-slate-700">${item.hmDiff}</td>
+                    <td class="p-3 sm:p-4">
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold ${item.status === 'RUNNING' ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}">
+                            ${item.status}
                         </span>
                     </td>
-                    <td class="p-3.5 text-center">
-                        <button onclick="deleteLog('${l.id}')" class="text-rose-500 hover:text-rose-700 p-1"><i class="fa-solid fa-trash-can"></i></button>
+                    <td class="p-3 sm:p-4 text-center">
+                        ${item.status === 'COMPLETED' ? `<button onclick="deleteLog('${item.id}')" class="text-slate-400 hover:text-rose-600 transition"><i class="fa-solid fa-trash"></i></button>` : '-'}
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -503,103 +432,95 @@
         }
 
         function deleteLog(id) {
-            if (confirm('Hapus catatan log ini?')) {
+            if (confirm('Hapus riwayat log ini?')) {
                 logs = logs.filter(l => l.id !== id);
-                saveToStorage();
-                updateUI();
+                saveState();
             }
         }
 
-        // Modal Input Manual
         function openManualModal() {
-            document.getElementById('manual-start').value = toLocalDateTimeString();
-            document.getElementById('manual-stop').value = toLocalDateTimeString();
-            toggleManualHM();
-            document.getElementById('modal-manual').classList.remove('hidden');
+            const now = new Date();
+            const past = new Date(now.getTime() - 60 * 60 * 1000);
+            document.getElementById('mStart').value = past.toISOString().slice(0, 16);
+            document.getElementById('mStop').value = now.toISOString().slice(0, 16);
+            document.getElementById('mHmStart').value = getLastHm25();
+            document.getElementById('mHmStop').value = (getLastHm25() + 1.0).toFixed(1);
+            document.getElementById('manualModal').classList.remove('hidden');
+            handleModalUnitChange();
         }
-        function closeManualModal() {
-            document.getElementById('modal-manual').classList.add('hidden');
-        }
-        function toggleManualHM() {
-            const unit = document.getElementById('manual-unit').value;
-            const group = document.getElementById('manual-hm-group');
-            if (unit === 'Genset 25 kVA') {
-                group.classList.remove('hidden');
-                let last = logs.filter(l => l.unit === unit && l.hmStop !== 'N/A').pop();
-                document.getElementById('manual-hm-start').value = last ? last.hmStop : 1060.0;
-            } else {
-                group.classList.add('hidden');
-            }
-        }
-        function submitManualLog() {
-            const unit = document.getElementById('manual-unit').value;
-            const start = document.getElementById('manual-start').value;
-            const stop = document.getElementById('manual-stop').value;
-            const notes = document.getElementById('manual-notes').value || 'Manual';
 
-            if (!start || !stop) {
-                alert('Harap isi waktu start dan stop!');
-                return;
-            }
+        function closeManualModal() { document.getElementById('manualModal').classList.add('hidden'); }
 
-            let hmStart = null, hmStop = null, hmDiff = null;
+        function handleModalUnitChange() {
+            const unit = document.getElementById('mUnit').value;
+            const hmSec = document.getElementById('modalHmSection');
+            if (unit === 'Genset 6.9 kVA') hmSec.classList.add('hidden');
+            else hmSec.classList.remove('hidden');
+        }
+
+        function saveManualLog(e) {
+            e.preventDefault();
+            const unit = document.getElementById('mUnit').value;
+            const start = document.getElementById('mStart').value;
+            const stop = document.getElementById('mStop').value;
+            const notes = document.getElementById('mNotes').value || 'Input Manual';
+
+            let hmStart = 'N/A', hmStop = 'N/A', hmDiff = 'N/A';
             if (unit === 'Genset 25 kVA') {
-                hmStart = parseFloat(document.getElementById('manual-hm-start').value) || 1060.0;
-                hmStop = parseFloat(document.getElementById('manual-hm-stop').value) || hmStart;
+                hmStart = parseFloat(document.getElementById('mHmStart').value);
+                hmStop = parseFloat(document.getElementById('mHmStop').value);
+                if (isNaN(hmStart) || isNaN(hmStop) || hmStop < hmStart) {
+                    alert('Nilai HM tidak valid!');
+                    return;
+                }
                 hmDiff = parseFloat((hmStop - hmStart).toFixed(1));
             }
 
-            const newLog = {
+            const record = {
                 id: 'GEN-' + Date.now(),
                 unit: unit,
-                startTime: formatDateTimeDisplay(start),
-                stopTime: formatDateTimeDisplay(stop),
+                startTime: formatDateTime(start),
+                stopTime: formatDateTime(stop),
                 duration: calculateDuration(start, stop),
-                hmStart: hmStart !== null ? hmStart : 'N/A',
-                hmStop: hmStop !== null ? hmStop : 'N/A',
-                hmDiff: hmDiff !== null ? hmDiff : 'N/A',
+                hmStart: hmStart,
+                hmStop: hmStop,
+                hmDiff: hmDiff,
                 status: 'COMPLETED',
                 notes: notes
             };
 
-            logs.unshift(newLog);
-            saveToStorage();
+            logs.unshift(record);
             closeManualModal();
-            syncToGoogleSheet(newLog);
-            updateUI();
+            saveState();
+            syncToCloud(record);
         }
 
-        // Konfigurasi Google Sheets Modal
-        function openSheetConfigModal() {
-            document.getElementById('sheet-url-input').value = sheetWebAppUrl;
-            document.getElementById('modal-sheet').classList.remove('hidden');
-        }
-        function closeSheetConfigModal() {
-            document.getElementById('modal-sheet').classList.add('hidden');
-        }
-        function saveSheetUrl() {
-            sheetWebAppUrl = document.getElementById('sheet-url-input').value.trim();
-            localStorage.setItem('genset_sheet_url', sheetWebAppUrl);
-            closeSheetConfigModal();
-            alert('URL Google Sheets berhasil disimpan!');
+        function syncToCloud(data) {
+            if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("MASUKKAN_URL")) return;
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).catch(err => console.error('Cloud sync error:', err));
         }
 
         function exportCSV() {
-            let csvContent = "data:text/csv;charset=utf-8,ID,Unit,Waktu Start,Waktu Stop,Durasi,HM Start,HM Stop,Selisih HM,Status,Catatan\n";
+            let csv = 'ID,Unit,Waktu Start,Waktu Stop,Durasi,HM Start,HM Stop,Selisih HM,Status,Catatan\n';
             logs.forEach(l => {
-                csvContent += `"${l.id}","${l.unit}","${l.startTime}","${l.stopTime}","${l.duration}","${l.hmStart}","${l.hmStop}","${l.hmDiff}","${l.status}","${l.notes}"\n`;
+                csv += `"${l.id}","${l.unit}","${l.startTime}","${l.stopTime}","${l.duration}","${l.hmStart}","${l.hmStop}","${l.hmDiff}","${l.status}","${l.notes}"\n`;
             });
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "log_operasional_genset.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'log_genset_' + new Date().toISOString().slice(0,10) + '.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
         }
 
-        // Inisialisasi awal
-        updateUI();
+        saveState();
     </script>
 </body>
 </html>
